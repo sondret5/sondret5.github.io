@@ -24,7 +24,7 @@ body,html {
 }
 header {
   background: #0e1416;
-  padding: 15px 15px;
+  padding: 10px 10px;
   max-width: 1000px;
   margin: auto;
 }
@@ -94,9 +94,10 @@ address {
   padding: 10px 10px 10px 10px; color: #c5c5c5; text-align: left;
 }
 aside > div {
-  margin: 10px auto;
+  margin: 15px auto;
+  padding: 10px;
   background: #0e1416;
-  min-height: 100px;
+  min-height: 50px;
 }
 #logo {
   display: inline-block;
