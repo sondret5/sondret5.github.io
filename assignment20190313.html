@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sondret5.github.io</title>
+    <meta name="description" content="Sondret5's webpage. Used for testing.">
+    <link rel="stylesheet" href="main.css">
+    <script src="script.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <div id="logo">Sondret5.github.io</div>
+      <nav>  
+        <ul>
+          <li><a href="index.html">Home</a>
+		  <li><a href="game.html">Game</a>
+		  <li><a href="assignment20190313.html">Assignment</a>
+        </ul>
+      </nav>
+    </header>
+    <section>
+      <strong>Assignment I did for school. Documentation for how to set up DHCP, FTP and Apache on Debian, and DNS on Server 2016</strong>
+    </section>
+    <section id="pageContent">
+      <main role="main">
+        <article>
+          <h2>About the assignment</h2>
+          <p>This is an assignment I did at school. We were tasked with setting up 3 VMs with Debian, Server 2016 and one Win10 client. 
+		    <br>I’ve named each VM AK(for ArbeidsKrav, Norwegian for required assignment) – and then their role in the network. Klient is Norwegian for client.
+			<br><br>We were to configure each VM like this:
+		    <br>AK-Debian: Apache web-server, DHCP server, FTP server.
+	  	    <br>AK-Server: DNS (Domain Name Services).
+		    <br>AK-Klient: Blank.
+		    <br><br>Here’s the full assignment, I’ve taken the liberty of translating it to English for your reading pleasure:
+			<br><img src="./assignmentimages/1.png" alt="Image 1">
+          </p>
+        </article>
+		<article>
+          <h2>Documentation</h2>
+          <p>
+		    First thing I did was to set up 3 VMs with each their own operating systems. AK-Debian, AK-Server and AK-Klient-WIN10.
+		  </p>
+		  <br> <h3>Server 2016 </h3>
+		  <p>
+			Then I started configuring the VMs, starting with Server 2016.
+            <br>I installed the Active Directory Domain Services and DNS server roles.
+            <br><img src="./assignmentimages/2.png" alt="Image 2">
+			After that I promoted the server to domain controller of the new domain Sondre.no
+			<br><img src="./assignmentimages/3.png" alt="Image 3">
+			Then I just clicked next, next, next, install since I didn’t need to change any more settings for this lab environment.
+		  </p>
+		  <br> <h3>Debian initial setup</h3>
+		  <p>
+		    After I was done with installing the required services on Win2016, I started working on my Debian VM, starting with installing all the required services.
+			<br>I downloaded an updated app list using this command:
+			<br>sudo apt-get update
+			<br><br>I downloaded and installed Apache2 using this command:
+			<br><code>sudo apt-get install apache2</code>
+			<br><br>I downloaded and installed ISC DHCP Server using this command:
+			<br><code>apt-get install isc-dhcp-server</code>
+			<br><br>I downloaded and installed vsFTPd server and FTP client using this command:
+			<br><code>apt-get install vsftpd ftp </code>
+			<br><br>I then downloaded and installed 2 other utilities that would probably come in handy in the assignment:
+			<br><code>apt-get install net-tools</code>
+			<br><code>apt-get install dnsutils </code>
+			<br><br>After I had installed everything I needed for the assignment, I turned the Debian off and made a control point in Hyper-V manager in case I made some big errors during setup.
+			<br>Once the backup was done, I switched the Debian over to a virtual network in Hyper-V along with the Server2016 and win10 client and turned it back on.
+			<br><br>I then changed network settings on the Debian to this (/etc/network/interfaces):
+			<br><img src="./assignmentimages/4.png" alt="Image 4">
+			<br>After doing that I tested the Apache setup by going to the Debian’s IP in a web browser on the win10 client. This page popped up, indicating Apache was set up correctly.
+			<br><img src="./assignmentimages/5.png" alt="Image 5">
+		  </p>
+		  <br> <h3>FTP on Debian</h3>
+		  <p>
+		    I then set about getting FTP to work, so I could transfer my website to the Debian.
+            <br>I opened the config file at <code>/etc/vsftpd.conf</code> and added this line at the bottom: <code>write_enable=YES</code>
+            <br>And then I opened <code>/etc/ftpusers</code>, where users who are denied FTP access are listed. I removed root, since I need root access to transfer to the Apache folder.
+			<br>Then I restarted vsftpd by running «<code>systemctl restart vsftpd</code>»
+			<br>After that I ran a test using FTP via CMD on my windows 10 client. It seems to be working:
+			<br><img src="./assignmentimages/6.png" alt="Image 6">
+			<br>Upon checking the directory on the Debian, I can see the testftp file, indicating that it’s working. I now know that I can upload my website to the Apache directory with no issues.
+		  </p>
+		  <br> <h3>DHCP on Debian</h3>
+		  <p>
+		    Before I started configuring DHCP, I created another control point of the Debian VM.
+			Then I ran this command to set the eth0 interface for DHCP: 
+			<br><code>dpkg-reconfigure isc-dhcp-server</code>
+			<br><img src="./assignmentimages/7.png" alt="Image 7">
+			<br>Then I configured the dhcpd config file at /etc/dhcp/dhcpd.conf like this:
+			<br><img src="./assignmentimages/8.png" alt="Image 8">
+			<br>After configuring DHCP I restarted the service by running these 2 commands:
+			<br><code>service isc-dhcp-server stop</code>
+			<br><code>service isc-dhcp-server start</code>
+			<br><br>Then I ran a test on my win10 client to test if the DHCP was working<br>(<code>ipconfig /all</code>):
+			<br><img src="./assignmentimages/9.png" alt="Image 9">
+			As we can see, I got an address in the range and lease-time that was configured. Therefore we can confirm DHCP as working.
+		  </p>
+		  <br> <h3>Website</h3>
+		  <p>
+		     With every single service working as required, I could start setting up the website to publish on the server. I won’t be able to document the transfer of the website from my computer to the server, but I'm planning on transferring the website folder to the win10 client, and from there transferring it to the Debian server via FTP.
+		     <br>Website template I’ll be using: <a href="https://sondret5.github.io/">https://sondret5.github.io/</a></p>
+
+		  </p>
+        </article>
+      </main>
+      <aside>
+        <div>
+          <h4>Evaluation</h4>
+          <p>I feel this assignment went fine, maybe the documentation is a bit messy, but overall I'm happy with it.</p> 
+		</div>
+      </aside>
+    </section>
+	
+    <footer>
+      <h4>Contact information:</h4> 
+	  <br>
+	  <p>Name: &nbsp;&nbsp;&nbsp;Sondre Thorsrud</p>
+	  <p>Email: &nbsp;&nbsp;&nbsp; <a href="mailto:sondre@epost.no">Sondre@epost.no</a></p>
+	  <p>Discord: &nbsp;<a href="https://discord.gg/x38uPKK">Discord server</a></p>
+	  <p>Twitter: &nbsp;&nbsp;<a href="https://twitter.com/sondret5">@Sondret5</a></p>
+	  <p>Steam: &nbsp;&nbsp;<a href="https://steamcommunity.com/id/sondret5">Sondret5</a></p>
+	  <p>Youtube: <a href="https://www.youtube.com/channel/UCfuMfS8Az9TltxfLPOGrCXQ">Sondret5</a></p>
+    </footer>
+
+
+  </body>
+
+</html>
