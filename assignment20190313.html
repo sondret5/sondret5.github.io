@@ -35,7 +35,7 @@
 	  	    <br>AK-Server: DNS (Domain Name Services).
 		    <br>AK-Klient: Blank.
 		    <br><br>Here’s the full assignment, I’ve taken the liberty of translating it to English for your reading pleasure:
-			<br><img src="./assignmentimages/1.png" alt="Image 1">
+			</p><div class="grow"><br><img src="./assignmentimages/1.png" alt="Image 1"></div><p>
           </p>
         </article>
 		<article>
@@ -47,9 +47,9 @@
 		  <p>
 			Then I started configuring the VMs, starting with Server 2016.
             <br>I installed the Active Directory Domain Services and DNS server roles.
-            <br><img src="./assignmentimages/2.png" alt="Image 2">
+            </p><div class="grow"><br><img src="./assignmentimages/2.png" alt="Image 2"></div><p>
 			After that I promoted the server to domain controller of the new domain Sondre.no
-			<br><img src="./assignmentimages/3.png" alt="Image 3">
+			</p><div class="grow"><br><img src="./assignmentimages/3.png" alt="Image 3"></div><p>
 			Then I just clicked next, next, next, install since I didn’t need to change any more settings for this lab environment.
 		  </p>
 		  <br> <h3>Debian initial setup</h3>
@@ -69,9 +69,9 @@
 			<br><br>After I had installed everything I needed for the assignment, I turned the Debian off and made a control point in Hyper-V manager in case I made some big errors during setup.
 			<br>Once the backup was done, I switched the Debian over to a virtual network in Hyper-V along with the Server2016 and win10 client and turned it back on.
 			<br><br>I then changed network settings on the Debian to this (/etc/network/interfaces):
-			<br><img src="./assignmentimages/4.png" alt="Image 4">
+			</p><div class="grow"><br><img src="./assignmentimages/4.png" alt="Image 4"></div><p>
 			<br>After doing that I tested the Apache setup by going to the Debian’s IP in a web browser on the win10 client. This page popped up, indicating Apache was set up correctly.
-			<br><img src="./assignmentimages/5.png" alt="Image 5">
+			</p><div class="grow"><br><img src="./assignmentimages/5.png" alt="Image 5"></div><p>
 		  </p>
 		  <br> <h3>FTP on Debian</h3>
 		  <p>
@@ -80,7 +80,7 @@
             <br>And then I opened <code>/etc/ftpusers</code>, where users who are denied FTP access are listed. I removed root, since I need root access to transfer to the Apache folder.
 			<br>Then I restarted vsftpd by running «<code>systemctl restart vsftpd</code>»
 			<br>After that I ran a test using FTP via CMD on my windows 10 client. It seems to be working:
-			<br><img src="./assignmentimages/6.png" alt="Image 6">
+			</p><div class="grow"><br><img src="./assignmentimages/6.png" alt="Image 6"></div><p>
 			<br>Upon checking the directory on the Debian, I can see the testftp file, indicating that it’s working. I now know that I can upload my website to the Apache directory with no issues.
 		  </p>
 		  <br> <h3>DHCP on Debian</h3>
@@ -88,14 +88,15 @@
 		    Before I started configuring DHCP, I created another control point of the Debian VM.
 			Then I ran this command to set the eth0 interface for DHCP: 
 			<br><code>dpkg-reconfigure isc-dhcp-server</code>
-			<br><img src="./assignmentimages/7.png" alt="Image 7">
+			</p><div class="grow"><img src="./assignmentimages/7.png" alt="Image 7"></div><p>
 			<br>Then I configured the dhcpd config file at /etc/dhcp/dhcpd.conf like this:
-			<br><img src="./assignmentimages/8.png" alt="Image 8">
-			<br>After configuring DHCP I restarted the service by running these 2 commands:
+			</p><div class="grow"><br><img src="./assignmentimages/8.png" alt="Image 8"></div><p>
+			I also commented out other conflicting settings.
+			<br><br>After configuring DHCP I restarted the service by running these 2 commands:
 			<br><code>service isc-dhcp-server stop</code>
 			<br><code>service isc-dhcp-server start</code>
 			<br><br>Then I ran a test on my win10 client to test if the DHCP was working<br>(<code>ipconfig /all</code>):
-			<br><img src="./assignmentimages/9.png" alt="Image 9">
+		    </p><div class="grow"><img src="./assignmentimages/9.png" alt="Image 9"></div><p>
 			As we can see, I got an address in the range and lease-time that was configured. Therefore we can confirm DHCP as working.
 		  </p>
 		  <br> <h3>Website</h3>
@@ -117,6 +118,13 @@
         <div>
           <h4>Evaluation</h4>
           <p>I feel this assignment went fine, maybe the documentation is a bit messy, but overall I'm happy with it.</p> 
+		</div>
+		<div>
+          <h4>Download this documentation</h4>
+          <p>
+		    click <a href="./assignmentimages/Documentation.pdf" download>HERE</a> to download the documentation for this project, or follow this link: 
+			<br> <code>sondret5.github.io/assignmentimages/Documentation.pdf</code>
+		  </p> 
 		</div>
       </aside>
     </section>
